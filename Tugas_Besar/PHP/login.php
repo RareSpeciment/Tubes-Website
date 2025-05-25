@@ -60,7 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     setcookie('remember_token', $token, $expires, '/', '', true, true);
                 }
 
-                header('Location: profile.php');
+                header('Location: index.php');
                 exit;
             } else {
                 $error = 'Invalid credentials';

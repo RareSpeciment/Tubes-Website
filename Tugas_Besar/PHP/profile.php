@@ -51,19 +51,11 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - <?= htmlspecialchars($user['username']) ?></title>
-    <link rel="stylesheet" href="../CSS/login.css">
     <link rel="stylesheet" href="../CSS/profile.css">
 </head>
 <body>
-    <div class="navbar">
-        <div class="logo">LOGO</div>
-        <div class="nav-links">
-            <a href="index.php" class="nav-link">Index</a>
-            <a href="books.php" class="nav-link">Books</a>
-            <a href="settings.php" class="nav-link">Settings</a>
-            <a href="logout.php" class="nav-link">Log Out</a>
-        </div>
-    </div>
+    <?php include 'header.php'; ?>
+
     <div class="profile-content">
         <div class="profile-container">
             <div class="profile-image"></div>
@@ -90,13 +82,7 @@ try {
             </div>
         </div>
     </div>
-    <footer>
-        <table class="footer-table">
-            <tr>
-                <td class="footer-left">&copy; 2025 Library Website</td>
-                <td class="footer-right">Designed</td>
-            </tr>
-        </table>
-    </footer>
+    
+    <?php include 'footer.php'; ?>
 </body>
 </html>
