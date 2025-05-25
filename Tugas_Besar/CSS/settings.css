@@ -1,0 +1,144 @@
+.settings-container {
+    display: flex;
+    height: 100%;
+    background-color: #36393f; 
+    color: #dcddde;
+    font-family: 'Arial', sans-serif;
+}
+
+.sidebar {
+    width: 240px;
+    background-color: #2f3136; 
+    padding: 10px;
+    flex-shrink: 0;
+}
+
+.sidebar h3 {
+    color: #99aab5;
+    font-size: 0.8em;
+    margin-top: 15px;
+    margin-bottom: 5px;
+    padding: 0 8px;
+}
+
+.sidebar ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.sidebar li {
+    padding: 8px 8px;
+    cursor: pointer;
+    border-radius: 4px;
+    margin-bottom: 2px;
+    font-size: 0.9em;
+}
+
+.sidebar li:hover {
+    background-color: #393c43;
+}
+
+.sidebar li.active {
+    background-color: #4f545c;
+    color: #fff;
+}
+
+.main-content {
+    flex-grow: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+.user-info-section {
+    background-color: #2f3136; 
+    width: 90%;
+    padding: 15px;
+    border-radius: 5px;
+}
+
+.user-profile {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid #4f545c;
+}
+
+.user-profile .avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    margin-right: 15px;
+    background-color: #5865f2;
+}
+
+.user-profile .user-details {
+    flex-grow: 1;
+}
+
+.user-profile .username-tag {
+    font-size: 1.2em;
+    color: #fff;
+    margin-bottom: 5px;
+}
+
+.user-profile button {
+    background-color: #5865f2; 
+    color: #fff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
+}
+
+.info-fields .info-item {
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    border-bottom: 1px solid #4f545c; 
+}
+
+.info-fields .info-item:last-child {
+    border-bottom: none;
+}
+
+.info-fields .info-item a {
+    color: #7289da; 
+    text-decoration: none;
+    margin-left: 5px;
+}
+
+.info-fields .info-item button {
+     background-color: #4f545c; /* Button background */
+    color: #fff;
+    border: none;
+    padding: 5px 10px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.8em;
+}
+
+.password-section h3,
+.password-section h4 {
+    color: #fff;
+}
+
+.password-section button {
+    background-color: #5865f2; 
+    color: #fff;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1em;
+    margin-bottom: 15px;
+}
+
+.password-section p {
+    font-size: 0.9em;
+    color: #dcddde;
+    line-height: 1.4;
+}
