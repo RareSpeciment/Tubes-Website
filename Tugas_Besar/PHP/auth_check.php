@@ -12,18 +12,19 @@ if (!isset($_SESSION['user'])) {
                 WHERE rt.token = ? AND rt.expires_at > NOW()");
             $stmt->execute([$_COOKIE['remember_token']]);
             $user = $stmt->fetch();
-            
+
             if ($user) {
                 $_SESSION['user'] = [
                     'id' => $user['id'],
                     'username' => $user['username'],
-                    'email' => $user['email']
+                    'email' => $user['email'],
+                    'role' => $user['role']
                 ];
             } else {
                 header('Location: login.php');
                 exit;
             }
-        } catch(PDOException $e) {
+        } catch (PDOException $e) {
             header('Location: login.php');
             exit;
         }
@@ -39,4 +40,3 @@ if (isset($_SESSION['user']) && !isset($_COOKIE['PHPSESSID'])) {
     header('Location: login.php');
     exit;
 }
-?>
