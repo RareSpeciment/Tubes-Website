@@ -17,7 +17,15 @@
 
     <div class="main-content">
         <div class="description-box">
-            <span>Picture or Description About website</span>
+            <span>
+                <?php
+                    if (isset($_SESSION['user'])) {
+                        echo "Welcome, " . htmlspecialchars($_SESSION['user']['username']);
+                    } else {
+                        echo "Welcome, Guest";
+                    }
+                ?>
+            </span>
         </div>
     </div>
 
