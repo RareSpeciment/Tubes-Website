@@ -75,30 +75,28 @@
                 </ul>
             </div>
         </div>
+        
         <div class="main-content">
             <div class="user-info-section">
                 <div class="user-profile">
                     <img src="" alt="User Avatar" class="avatar">
                     <div class="user-details">
                         <div class="username-tag"><?= htmlspecialchars($user['username']) ?></div>
-                        <button>Edit User Profile</button>
+                        <button><a href="edituser.php">Edit User Profile</a></button>
                     </div>
                 </div>
                 <div class="info-fields">
                     <div class="info-item">
                         <span>Username</span>
-                        <span><?= htmlspecialchars($user['username']) ?></span>
-                        <button>Edit</button>
+                        <span><?= htmlspecialchars($user['username']) ?></span> 
                     </div>
                      <div class="info-item">
                         <span>Email</span>
                         <span><?= htmlspecialchars($user['email']) ?></span>
-                        <button>Edit</button>
                     </div>
                      <div class="info-item">
-                        <span>Phone Number</span>
-                        <span><?php echo isset($_SESSION['phone_number']) ? htmlspecialchars($_SESSION['phone_number']) : 'You haven\'t added a phone number yet.'; ?></span>
-                        <button>Add</button>
+                        <span>Age</span>
+                        <span><?php echo isset($_SESSION['age']) ? htmlspecialchars($_SESSION['age']) : 'You Have not set your age yet!.'; ?></span>
                     </div>
                 </div>
                 <hr>
