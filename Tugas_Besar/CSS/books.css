@@ -44,37 +44,46 @@ body {
 .search-bar-container {
     display: flex;
     align-items: center;
-    margin-left: 40px;
-    margin-bottom: 30px;
-    gap: 10px;
+    margin: 30px 40px;
+    gap: 15px;
+    background: #ffffff;
+    padding: 10px 20px;
+    border-radius: 30px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .search-input {
     border: none;
     border-radius: 20px;
-    padding: 8px 18px;
+    padding: 10px 20px;
     font-size: 1.1rem;
-    background: #e0e0e0;
-    width: 220px;
+    background: #f5f6fa;
+    width: 250px;
     outline: none;
+    transition: all 0.3s ease;
+}
+
+.search-input:focus {
+    background: #ffffff;
+    box-shadow: 0 0 0 2px #3498db;
 }
 
 .search-icon-btn {
-    background: #e0e0e0;
+    background: #3498db;
     border: none;
     border-radius: 50%;
-    width: 36px;
-    height: 36px;
+    width: 40px;
+    height: 40px;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    margin-left: 2px;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
 }
 
 .search-icon-btn:hover {
-    background: #d6d6d6;
+    background: #2980b9;
+    transform: scale(1.05);
 }
 
 .search-icon {
@@ -89,9 +98,7 @@ body {
 .search-icon::after {
     content: '';
     position: absolute;
-    left: 0;
-    right: 0;
-    background: #232225;
+    background: #ffffff;
     border-radius: 2px;
 }
 
@@ -99,61 +106,89 @@ body {
     top: 7px;
     height: 3px;
     width: 22px;
+    transform: rotate(45deg);
 }
 
 .search-icon::after {
     top: 14px;
     height: 3px;
     width: 22px;
-}
-
-.books-row {
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-start;
-    gap: 32px;
-    margin-left: 40px;
+    transform: rotate(-45deg);
 }
 
 .book-card {
-    background: #d6d6d6;
+    background: linear-gradient(145deg, #2c3e50, #34495e);
     border-radius: 20px;
-    width: 180px;
-    min-width: 160px;
-    padding: 18px 0 10px 0;
+    width: 200px;
+    min-width: 180px;
+    padding: 20px 0 15px 0;
     display: flex;
     flex-direction: column;
     align-items: center;
     position: relative;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    color: #ffffff;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.book-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
 }
 
 .book-image {
-    width: 130px;
-    height: 130px;
-    background: #f7f2f2;
+    width: 140px;
+    height: 140px;
+    background: #ffffff;
     border-radius: 14px;
-    margin-bottom: 12px;
-    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+    margin-bottom: 15px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.book-image:hover {
+    transform: scale(1.05);
+}
+
+.book-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    display: block;
+}
+
+button {
+    border: none;
+    padding: 8px 15px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 0.9em;
 }
 
 .book-title {
-    font-size: 1.1rem;
-    color: #232225;
-    margin-bottom: 8px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #ffffff;
+    margin: 10px 15px;
     text-align: center;
+    line-height: 1.4;
 }
 
 .book-author {
     font-size: 1rem;
-    color: #232225;
+    color: #ecf0f1;
+    margin: 0 15px 10px 15px;
     text-align: center;
+    opacity: 0.9;
 }
 
 .book-date {
     font-size: 0.9rem;
-    color: #232225;
-    opacity: 0.7;
+    color: #bdc3c7;
+    opacity: 0.8;
 }
 
 .navbar .nav-links {
@@ -178,18 +213,18 @@ body {
 }
 
 .delete-btn {
-    all: unset;
     background: none;
     border: none;
-    outline: none;
-    box-shadow: none;
     color: #e74c3c;
     cursor: pointer;
-    padding: 0;
-    margin: 0;
-    font: inherit;
-    text-decoration: underline;
-    transition: color 0.2s;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+}
+
+.delete-btn:hover {
+    background: rgba(231, 76, 60, 0.1);
+    color: #c0392b;
 }
 
 .delete-text {
@@ -238,4 +273,132 @@ body {
         width: 90px;
         height: 90px;
     }
+}
+/* Styling for the Upload Book form */
+.books-content form {
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    max-width: 600px;
+    margin: 30px auto;
+}
+
+.books-content form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.books-content form input[type="text"],
+.books-content form textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border: 2px solid #e0e0e0;
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    margin-bottom: 20px;
+}
+
+.books-content form input[type="text"]:focus,
+.books-content form textarea:focus {
+    border-color: #3498db;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+    outline: none;
+}
+
+.books-content form input[type="file"] {
+    margin-bottom: 20px;
+    padding: 10px;
+    border: 2px dashed #e0e0e0;
+    border-radius: 8px;
+    width: 100%;
+    cursor: pointer;
+}
+
+.books-content form button[type="submit"] {
+    background: #3498db;
+    color: white;
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    width: 100%;
+}
+
+.books-content form button[type="submit"]:hover {
+    background: #2980b9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.books-content p {
+    text-align: center;
+    margin: 20px 0;
+    padding: 15px;
+    border-radius: 8px;
+    font-weight: 500;
+}
+
+.books-content p:not([class*="error"]) {
+    background: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.books-content p[class*="error"] {
+    background: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+button,
+.search-bar-container button {
+    background: linear-gradient(135deg, #8a2be2, #9932cc);
+    color: white;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 30px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+button:hover,
+.search-bar-container button:hover {
+    background: linear-gradient(135deg, #9932cc, #8a2be2);
+    transform: translateY(-3px);
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+}
+
+button:focus,
+.search-bar-container button:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.4);
+}
+
+.search-bar-container button a {
+    color: white;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: inherit;
+}
+
+.search-bar-container button a::before {
+    content: '+';
+    font-size: 1.2rem;
+    font-weight: bold;
 }
