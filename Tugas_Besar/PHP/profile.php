@@ -22,53 +22,6 @@ if (!isset($_SESSION['user']) && isset($_COOKIE['remember_token'])) {
     }
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_FILES['profile_image'])) {
-    $uploadDir = '../uploads/profiles/';
-    $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
-    $maxSize = 2 * 1024 * 1024;
-
-    if (!file_exists($uploadDir)) {
-        mkdir($uploadDir, 0755, true);
-    }
-
-    if (!is_writable($uploadDir)) {
-        $_SESSION['error'] = "Upload directory is not writable.";
-    } else {
-        $file = $_FILES['profile_image'];
-
-        if ($file['error'] === UPLOAD_ERR_OK) {
-            $finfo = new finfo(FILEINFO_MIME_TYPE);
-            $mime = $finfo->file($file['tmp_name']);
-
-            if (in_array($mime, $allowedTypes) && $file['size'] <= $maxSize) {
-                $fileName = uniqid('profile_', true) . '_' . preg_replace('/[^a-zA-Z0-9\.]/', '_', $file['name']);
-                $targetPath = $uploadDir . $fileName;
-
-                if (move_uploaded_file($file['tmp_name'], $targetPath)) {
-                    try {
-                        $stmt = $pdo->prepare("UPDATE users SET profile_image = ? WHERE id = ?");
-                        $stmt->execute([$fileName, $_SESSION['user']['id']]);
-
-                        $_SESSION['user']['profile_image'] = $fileName;
-
-                        header("Location: profile.php");
-                        exit;
-                    } catch (PDOException $e) {
-                        error_log("Database update error: " . $e->getMessage());
-                        $_SESSION['error'] = "Failed to update profile image.";
-                    }
-                } else {
-                    $_SESSION['error'] = "Failed to move uploaded file.";
-                }
-            } else {
-                $_SESSION['error'] = "Invalid file type or size (max 2MB).";
-            }
-        } else {
-            $_SESSION['error'] = "Error uploading file.";
-        }
-    }
-}
-
 if (!isset($_SESSION['user'])) {
     header('Location: login.php');
     exit;
@@ -92,6 +45,8 @@ try {
     die("Database error: " . $e->getMessage());
 }
 ?>
+
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -99,7 +54,7 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - <?= htmlspecialchars($user['username']) ?></title>
-    <link rel="stylesheet" href="../CSS/profile.css">
+    <link rel="stylesheet" href="..//CSS/profilepreview.css">
 </head>
 
 <body>
@@ -111,21 +66,14 @@ try {
             <?php unset($_SESSION['error']); ?>
         <?php endif; ?>
         <div class="profile-container">
-            <form method="POST" enctype="multipart/form-data" class="image-upload-form">
+            <div class="profile-image-container">
                 <label class="profile-image">
-                    <input type="file" name="profile_image" accept="image/*" class="hidden-input" id="profileUpload">
                     <?php if (!empty($user['profile_image'])): ?>
-                        <img src="../uploads/profiles/<?= htmlspecialchars($user['profile_image']) ?>"
-                            alt="Profile"
-                            class="profile-img">
-                    <?php else: ?>
-                        <div class="upload-indicator">
-                            <i class="fas fa-camera"></i>
-                        </div>
+                        <img src="../uploads/profiles/<?= htmlspecialchars($user['profile_image']) ?>" alt="Profile" class="profile-img">
                     <?php endif; ?>
                 </label>
-                <button type="submit" class="hidden-submit" style="display:none;">Submit</button>
-            </form>
+            </div>
+
             <div class="profile-info">
                 <div><span class="profile-label">Username</span> :
                     <span class="profile-value"><?= htmlspecialchars($user['username']) ?></span>
@@ -148,16 +96,23 @@ try {
                 </div>
             </div>
         </div>
+
+        <br>
+        <label>Books Uploaded By You</label>
+        <hr>
+        <div class="uploaded-books">
+            
+        </div>
     </div>
 
     <?php include 'footer.php'; ?>
 
     <script>
-        document.getElementById('profileUpload').addEventListener('change', function () {
+        document.getElementById('profileUpload').addEventListener('change', function() {
             const file = this.files[0];
             if (file) {
                 const reader = new FileReader();
-                reader.onload = function (e) {
+                reader.onload = function(e) {
                     let img = document.querySelector('.profile-img');
                     if (img) {
                         img.src = e.target.result;
@@ -176,5 +131,4 @@ try {
         });
     </script>
 </body>
-
 </html>

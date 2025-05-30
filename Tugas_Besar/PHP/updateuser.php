@@ -46,21 +46,74 @@ try {
         exit;
     }
 
-    // Update user information
-    $stmt = $pdo->prepare("UPDATE users SET 
-        username = ?,
-        email = ?,
-        age = ?,
-        about_me = ?
-        WHERE id = ?");
+    $profile_image = null;
+    if (isset($_FILES['profile_image']) && $_FILES['profile_image']['error'] === UPLOAD_ERR_OK) {
+        $uploadDir = '../uploads/profiles/';
+        $allowedTypes = ['image/jpeg', 'image/png', 'image/gif'];
+        $maxSize = 2 * 1024 * 1024; // 2MB
+
+        if (!file_exists($uploadDir)) {
+            mkdir($uploadDir, 0755, true);
+        }
+
+        $file = $_FILES['profile_image'];
+        $finfo = new finfo(FILEINFO_MIME_TYPE);
+        $mime = $finfo->file($file['tmp_name']);
+
+        if (in_array($mime, $allowedTypes) && $file['size'] <= $maxSize) {
+            $fileName = uniqid('profile_', true) . '_' . preg_replace('/[^a-zA-Z0-9\.]/', '_', $file['name']);
+            $targetPath = $uploadDir . $fileName;
+
+            if (move_uploaded_file($file['tmp_name'], $targetPath)) {
+                $profile_image = $fileName;
+            } else {
+                $_SESSION['error'] = "Failed to move uploaded file";
+                header('Location: edituser.php');
+                exit;
+            }
+        } else {
+            $_SESSION['error'] = "Invalid file type or size (max 2MB)";
+            header('Location: edituser.php');
+            exit;
+        }
+    }
     
-    $stmt->execute([
-        $username,
-        $email,
-        $age,
-        $about_me,
-        $_SESSION['user']['id']
-    ]);
+    if ($profile_image) {
+        $stmt = $pdo->prepare("UPDATE users SET 
+            username = ?,
+            email = ?,
+            age = ?,
+            about_me = ?,
+            profile_image = ?
+            WHERE id = ?");
+        
+        $stmt->execute([
+            $username,
+            $email,
+            $age,
+            $about_me,
+            $profile_image,
+            $_SESSION['user']['id']
+        ]);
+
+        // Update session data with new profile image
+        $_SESSION['user']['profile_image'] = $profile_image;
+    } else {
+        $stmt = $pdo->prepare("UPDATE users SET 
+            username = ?,
+            email = ?,
+            age = ?,
+            about_me = ?
+            WHERE id = ?");
+        
+        $stmt->execute([
+            $username,
+            $email,
+            $age,
+            $about_me,
+            $_SESSION['user']['id']
+        ]);
+    }
 
     // Update session data
     $_SESSION['user']['username'] = $username;
