@@ -1,0 +1,139 @@
+.profile-content {
+    padding: 40px 20px;
+    min-height: calc(100vh - 110px);
+}
+
+.profile-container {
+    max-width: 800px;
+    margin: 0 auto;
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    padding: 30px;
+    display: flex;
+    gap: 30px;
+}
+
+.profile-image-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    border: 3px solid #3498db;
+    background: #f0f0f0;
+    transition: all 0.3s ease;
+    margin: 0 auto 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-image {
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-info {
+    flex: 1;
+}
+
+.profile-label {
+    font-weight: 600;
+    color: #2c3e50;
+    min-width: 120px;
+    display: inline-block;
+}
+
+.profile-value {
+    color: #34495e;
+}
+
+.profile-about-label {
+    font-weight: 600;
+    margin: 20px 0 10px;
+    color: #2c3e50;
+}
+
+.profile-about {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    line-height: 1.6;
+    color: #444;
+}
+
+.profile-image-form {
+    position: relative;
+    text-align: center;
+}
+
+.profile-image-label {
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+}
+
+.profile-image-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.profile-image-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    color: #3498db;
+}
+
+.profile-image-placeholder i {
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.profile-image-placeholder span {
+    font-size: 0.9rem;
+}
+
+.profile-image-save {
+    margin-top: 15px;
+    padding: 8px 25px;
+    background: #3498db;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.3s;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .profile-container {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+
+    .profile-image {
+        margin-bottom: 20px;
+    }
+
+    .profile-label {
+        display: block;
+        margin-bottom: 5px;
+    }
+}
