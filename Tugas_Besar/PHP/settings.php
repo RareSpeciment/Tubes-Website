@@ -102,7 +102,7 @@
                 <hr>
                 <div class="password-section">
                     <h3>Password</h3>
-                    <button>Change Password</button>
+                    <button><a href="changepass.php">Change Password</button>
                 </div>
             </div>
         </div>
