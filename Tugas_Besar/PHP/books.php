@@ -81,7 +81,7 @@ try {
 
     <div class="books-content">
         <div class="search-bar-container">
-            <input type="text" class="search-input" placeholder="Search">
+            <input type="text" class="search-input" id="bookSearch" placeholder="Search">
             <button class="search-icon-btn" aria-label="Menu">
                 <span class="search-icon"></span>
             </button>
@@ -186,6 +186,20 @@ try {
         });
 
         document.body.style.overflowX = 'hidden';
+
+        const bookInput = document.getElementById('bookSearch');
+        const bookCards = document.querySelectorAll('.book-card');
+
+        bookInput.addEventListener('input', () => {
+            const term = bookInput.value.trim().toLowerCase();
+            bookCards.forEach(card => {
+                const title = card.querySelector('.book-title').textContent.toLowerCase();
+                const author = card.querySelector('.book-author').textContent.toLowerCase();
+                card.style.display = (title.includes(term) || author.includes(term)) ?
+                    'flex' :
+                    'none';
+            });
+        });
     </script>
     <?php include 'footer.php'; ?>
 </body>

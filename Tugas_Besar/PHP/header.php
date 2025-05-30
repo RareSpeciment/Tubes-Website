@@ -16,7 +16,7 @@
             <a href="index.php" class="nav-link">Home</a>
             <?php
             if (isset($_SESSION['user']['role']) && $_SESSION['user']['role'] === 'admin'): ?>
-                <a href="users.php" class="nav-link">Manage Users</a>
+                <a href="manage_users.php" class="nav-link">Manage Users</a>
             <?php endif; ?>
             <a href="books.php" class="nav-link">Books</a>
             <a href="profile.php" class="nav-link">Profile</a>
