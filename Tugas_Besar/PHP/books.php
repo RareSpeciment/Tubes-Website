@@ -66,6 +66,7 @@ try {
     die("Database error: " . $e->getMessage());
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -73,19 +74,23 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Books - Library Website</title>
-    <link rel="stylesheet" href="..//CSS/books.css">
+    <link rel="stylesheet" href="../CSS/books.css">
 </head>
 
 <body>
     <?php include 'header.php'; ?>
 
     <div class="books-content">
-        <div class="search-bar-container">
-            <input type="text" class="search-input" id="bookSearch" placeholder="Search">
-            <button class="search-icon-btn" aria-label="Menu">
-                <span class="search-icon"></span>
-            </button>
-        </div>
+        <div class="books-content">
+            <div class="search-bar-container">
+                <input type="text" class="search-input" placeholder="Search">
+                <button class="search-icon-btn" aria-label="Menu">
+                    <span class="search-icon"></span>
+                </button>
+                <?php if (isset($_SESSION['user'])): ?>
+                    <button><a href="upload_book.php">Upload Buku Baru</a></button>
+                <?php endif; ?>
+            </div>
         <div class="books-container" id="booksContainer">
             <div class="books-row" id="booksRow">
                 <?php foreach ($books as $index => $book): ?>
@@ -186,20 +191,6 @@ try {
         });
 
         document.body.style.overflowX = 'hidden';
-
-        const bookInput = document.getElementById('bookSearch');
-        const bookCards = document.querySelectorAll('.book-card');
-
-        bookInput.addEventListener('input', () => {
-            const term = bookInput.value.trim().toLowerCase();
-            bookCards.forEach(card => {
-                const title = card.querySelector('.book-title').textContent.toLowerCase();
-                const author = card.querySelector('.book-author').textContent.toLowerCase();
-                card.style.display = (title.includes(term) || author.includes(term)) ?
-                    'flex' :
-                    'none';
-            });
-        });
     </script>
     <?php include 'footer.php'; ?>
 </body>
