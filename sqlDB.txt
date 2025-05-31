@@ -46,6 +46,28 @@ VALUES (
     'admin'
 );
 
+CREATE TABLE comments (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT NOT NULL,
+    user_id INT DEFAULT NULL,
+    username VARCHAR(100) DEFAULT NULL,
+    comment TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE
+    -- Optionally, if you have a users table:
+    -- FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE SET NULL
+);
+
+CREATE TABLE book_likes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT NOT NULL,
+    user_id INT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE KEY unique_like (book_id, user_id),
+    FOREIGN KEY (book_id) REFERENCES books(id) ON DELETE CASCADE,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 INSERT INTO books (title, author, description, cover_image, uploaded_by, created_at) VALUES
 ('To Kill a Mockingbird', 'Harper Lee', 'A story of racial injustice and the loss of innocence in the American South', 'mockingbird.jpg', 1, NOW()),
 ('1984', 'George Orwell', 'A dystopian novel about totalitarianism and surveillance', '1984.jpg', 1, DATE_SUB(NOW(), INTERVAL 2 DAY)),
