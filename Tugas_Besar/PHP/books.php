@@ -69,6 +69,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -82,115 +83,113 @@ try {
     <div class="books-content">
         <div class="books-content">
             <div class="search-bar-container">
-                <input type="text" class="search-input" placeholder="Search">
-                <button class="search-icon-btn" aria-label="Menu">
-                    <span class="search-icon"></span>
-                </button>
-                <?php if (isset($_SESSION['user'])): ?>
-                    <button><a href="upload_book.php">Upload Buku Baru</a></button>
-                <?php endif; ?>
+                <form class="search-form" method="get" action="">
+                    <input type="text" class="search-input" placeholder="Search" name="q">
+                </form>
+                <a href="upload_book.php" class="add-book-btn">Add Book</a>
             </div>
-        <div class="books-container" id="booksContainer">
-            <div class="books-row" id="booksRow">
-                <?php foreach ($books as $index => $book): ?>
-                    <div class="book-card<?= $index >= 8 ? ' extra-card' : '' ?>">
+            <div class="books-container" id="booksContainer">
+                <div class="books-row" id="booksRow">
+                    <?php foreach ($books as $index => $book): ?>
+                        <div class="book-card<?= $index >= 8 ? ' extra-card' : '' ?>">
 
-                        <div class="book-image">
-                            <?php if ($book['cover_image']): ?>
-                                <img src="../uploads/books/<?= htmlspecialchars($book['cover_image']) ?>" alt="Book Cover">
+                            <div class="book-image">
+                                <?php if ($book['cover_image']): ?>
+                                    <img src="../uploads/books/<?= htmlspecialchars($book['cover_image']) ?>" alt="Book Cover">
+                                <?php endif; ?>
+                            </div>
+                            <div class="book-title"><?= htmlspecialchars($book['title']) ?></div>
+                            <div class="book-author">
+                                <?= htmlspecialchars($book['author']) ?><br>
+                                <span class="book-date">
+                                    <?= date('d/m/Y', strtotime($book['created_at'])) ?>
+                                </span>
+                            </div>
+
+                            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                                <form method="POST" class="delete-form">
+                                    <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
+                                    <button type="submit" name="delete_book" class="delete-btn">
+                                        <span class="delete-text">Delete</span>
+                                    </button>
+                                </form>
                             <?php endif; ?>
                         </div>
-                        <div class="book-title"><?= htmlspecialchars($book['title']) ?></div>
-                        <div class="book-author">
-                            <?= htmlspecialchars($book['author']) ?><br>
-                            <span class="book-date">
-                                <?= date('d/m/Y', strtotime($book['created_at'])) ?>
-                            </span>
-                        </div>
-
-                        <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                            <form method="POST" class="delete-form">
-                                <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
-                                <button type="submit" name="delete_book" class="delete-btn">
-                                    <span class="delete-text">Delete</span>
-                                </button>
-                            </form>
-                        <?php endif; ?>
-                    </div>
-                <?php endforeach; ?>
+                    <?php endforeach; ?>
+                </div>
             </div>
         </div>
-    </div>
 
-    <script>
-        const container = document.getElementById('booksContainer');
-        const row = document.getElementById('booksRow');
-        let isDragging = false;
-        let startX;
-        let scrollLeft;
-        let currentTranslate = 0;
-        let maxScroll = 0;
+        <script>
+            const container = document.getElementById('booksContainer');
+            const row = document.getElementById('booksRow');
+            let isDragging = false;
+            let startX;
+            let scrollLeft;
+            let currentTranslate = 0;
+            let maxScroll = 0;
 
-        function calculateMaxScroll() {
-            const containerWidth = container.offsetWidth;
-            const rowWidth = row.scrollWidth;
-            maxScroll = rowWidth - containerWidth;
+            function calculateMaxScroll() {
+                const containerWidth = container.offsetWidth;
+                const rowWidth = row.scrollWidth;
+                maxScroll = rowWidth - containerWidth;
 
-        }
+            }
 
-        window.addEventListener('resize', calculateMaxScroll);
-        calculateMaxScroll();
+            window.addEventListener('resize', calculateMaxScroll);
+            calculateMaxScroll();
 
-        container.addEventListener('mousedown', (e) => {
-            isDragging = true;
-            startX = e.pageX - container.offsetLeft;
-            scrollLeft = currentTranslate;
-            container.style.cursor = 'grabbing';
-        });
+            container.addEventListener('mousedown', (e) => {
+                isDragging = true;
+                startX = e.pageX - container.offsetLeft;
+                scrollLeft = currentTranslate;
+                container.style.cursor = 'grabbing';
+            });
 
-        container.addEventListener('mousemove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
+            container.addEventListener('mousemove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
 
-            const x = e.pageX - container.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            let newTranslate = scrollLeft - walk;
+                const x = e.pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                let newTranslate = scrollLeft - walk;
 
-            newTranslate = Math.max(-maxScroll, Math.min(newTranslate, 0));
-            currentTranslate = newTranslate;
-            row.style.transform = `translateX(${newTranslate}px)`;
-        });
+                newTranslate = Math.max(-maxScroll, Math.min(newTranslate, 0));
+                currentTranslate = newTranslate;
+                row.style.transform = `translateX(${newTranslate}px)`;
+            });
 
-        container.addEventListener('mouseup', () => {
-            isDragging = false;
-            container.style.cursor = 'grab';
-        });
+            container.addEventListener('mouseup', () => {
+                isDragging = false;
+                container.style.cursor = 'grab';
+            });
 
-        container.addEventListener('touchstart', (e) => {
-            isDragging = true;
-            startX = e.touches[0].pageX - container.offsetLeft;
-            scrollLeft = currentTranslate;
-        });
+            container.addEventListener('touchstart', (e) => {
+                isDragging = true;
+                startX = e.touches[0].pageX - container.offsetLeft;
+                scrollLeft = currentTranslate;
+            });
 
-        container.addEventListener('touchmove', (e) => {
-            if (!isDragging) return;
-            e.preventDefault();
+            container.addEventListener('touchmove', (e) => {
+                if (!isDragging) return;
+                e.preventDefault();
 
-            const x = e.touches[0].pageX - container.offsetLeft;
-            const walk = (x - startX) * 1.5;
-            let newTranslate = scrollLeft - walk;
+                const x = e.touches[0].pageX - container.offsetLeft;
+                const walk = (x - startX) * 1.5;
+                let newTranslate = scrollLeft - walk;
 
-            newTranslate = Math.max(-maxScroll, Math.min(newTranslate, 0));
-            currentTranslate = newTranslate;
-            row.style.transform = `translateX(${newTranslate}px)`;
-        });
+                newTranslate = Math.max(-maxScroll, Math.min(newTranslate, 0));
+                currentTranslate = newTranslate;
+                row.style.transform = `translateX(${newTranslate}px)`;
+            });
 
-        container.addEventListener('touchend', () => {
-            isDragging = false;
-        });
+            container.addEventListener('touchend', () => {
+                isDragging = false;
+            });
 
-        document.body.style.overflowX = 'hidden';
-    </script>
-    <?php include 'footer.php'; ?>
+            document.body.style.overflowX = 'hidden';
+        </script>
+        <?php include 'footer.php'; ?>
 </body>
+
 </html>
