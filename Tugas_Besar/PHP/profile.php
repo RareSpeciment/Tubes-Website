@@ -27,13 +27,22 @@ if (!isset($_SESSION['user'])) {
     exit;
 }
 
+// Fungsi hapus buku (hanya buku milik user sendiri)
+if (isset($_GET['delete_book'])) {
+    $book_id = intval($_GET['delete_book']);
+    // Pastikan buku milik user yang sedang login
+    $stmt = $pdo->prepare("DELETE FROM books WHERE id = ? AND uploaded_by = ?");
+    $stmt->execute([$book_id, $_SESSION['user']['id']]);
+    header("Location: profile.php");
+    exit;
+}
+
 try {
     $stmt = $pdo->prepare("SELECT 
         username,
         email,
         age,
         created_at,
-        books_uploaded,
         about_me,
         profile_image
         FROM users WHERE id = ?");
@@ -41,6 +50,12 @@ try {
     $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     $joined_date = date('d/m/Y', strtotime($user['created_at']));
+
+    // Ambil buku yang diupload user ini
+    $stmtBooks = $pdo->prepare("SELECT id, title, author, cover_image, created_at FROM books WHERE uploaded_by = ? ORDER BY created_at DESC");
+    $stmtBooks->execute([$_SESSION['user']['id']]);
+    $uploaded_books = $stmtBooks->fetchAll(PDO::FETCH_ASSOC);
+
 } catch (PDOException $e) {
     die("Database error: " . $e->getMessage());
 }
@@ -54,7 +69,8 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profile - <?= htmlspecialchars($user['username']) ?></title>
-    <link rel="stylesheet" href="..//CSS/profilepreview.css">
+    <link rel="stylesheet" href="../CSS/profilepreview.css">
+    <link rel="stylesheet" href="../CSS/books.css">
 </head>
 
 <body>
@@ -88,7 +104,7 @@ try {
                     <span class="profile-value"><?= $joined_date ?></span>
                 </div>
                 <div><span class="profile-label">Books Uploaded</span> :
-                    <span class="profile-value"><?= htmlspecialchars($user['books_uploaded']) ?></span>
+                    <span class="profile-value"><?= count($uploaded_books) ?></span>
                 </div>
                 <div class="profile-about-label">About Me :</div>
                 <div class="profile-about">
@@ -101,7 +117,29 @@ try {
         <label>Books Uploaded By You</label>
         <hr>
         <div class="uploaded-books">
-            
+            <?php if (count($uploaded_books) > 0): ?>
+                <div class="books-row">
+                    <?php foreach ($uploaded_books as $book): ?>
+                        <div class="book-card">
+                            <div class="book-image">
+                                <?php if ($book['cover_image']): ?>
+                                    <img src="../uploads/books/<?= htmlspecialchars($book['cover_image']) ?>" alt="Book Cover">
+                                <?php endif; ?>
+                            </div>
+                            <div class="book-title"><?= htmlspecialchars($book['title']) ?></div>
+                            <div class="book-author">
+                                <?= htmlspecialchars($book['author']) ?><br>
+                                <span class="book-date"><?= date('d/m/Y', strtotime($book['created_at'])) ?></span>
+                            </div>
+                            <div class="admin-actions">
+                                <a href="profile.php?delete_book=<?= $book['id'] ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php else: ?>
+                <p style="text-align:center;">You haven't uploaded any books yet.</p>
+            <?php endif; ?>
         </div>
     </div>
 

@@ -58,13 +58,16 @@ try {
     die("Database error: " . $e->getMessage());
 }
 
-try {
+$q = isset($_GET['q']) ? trim($_GET['q']) : '';
+if ($q !== '') {
+    $search = '%' . $q . '%';
+    $stmt = $pdo->prepare("SELECT * FROM books WHERE title LIKE ? OR author LIKE ? OR description LIKE ?");
+    $stmt->execute([$search, $search, $search]);
+} else {
     $stmt = $pdo->prepare("SELECT * FROM books");
     $stmt->execute();
-    $books = $stmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (PDOException $e) {
-    die("Database error: " . $e->getMessage());
 }
+$books = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
 <!DOCTYPE html>
@@ -84,37 +87,36 @@ try {
         <div class="books-content">
             <div class="search-bar-container">
                 <form class="search-form" method="get" action="">
-                    <input type="text" class="search-input" placeholder="Search" name="q">
+                    <input type="text" class="search-input" placeholder="Search" name="q" value="<?= htmlspecialchars($q) ?>">
                 </form>
                 <a href="upload_book.php" class="add-book-btn">Add Book</a>
             </div>
             <div class="books-container" id="booksContainer">
                 <div class="books-row" id="booksRow">
                     <?php foreach ($books as $index => $book): ?>
-                        <div class="book-card<?= $index >= 8 ? ' extra-card' : '' ?>">
-
-                            <div class="book-image">
-                                <?php if ($book['cover_image']): ?>
-                                    <img src="../uploads/books/<?= htmlspecialchars($book['cover_image']) ?>" alt="Book Cover">
+                        <a href="read.php?id=<?= $book['id'] ?>" class="book-link">
+                            <div class="book-card<?= $index >= 8 ? ' extra-card' : '' ?>">
+                                <div class="book-image">
+                                    <?php if ($book['cover_image']): ?>
+                                        <img src="../uploads/books/<?= htmlspecialchars($book['cover_image']) ?>" alt="Book Cover">
+                                    <?php else: ?>
+                                        <img src="../uploads/books/placeholder.png" alt="No Cover">
+                                    <?php endif; ?>
+                                </div>
+                                <div class="book-title"><?= htmlspecialchars($book['title']) ?></div>
+                                <div class="book-author">
+                                    <?= htmlspecialchars($book['author']) ?><br>
+                                    <span class="book-date">
+                                        <?= date('d/m/Y', strtotime($book['created_at'])) ?>
+                                    </span>
+                                </div>
+                                <?php if ($_SESSION['user']['role'] === 'admin'): ?>
+                                    <div class="admin-actions">
+                                        <a href="delete_book.php?id=<?= $book['id'] ?>" class="delete-btn" onclick="return confirm('Are you sure you want to delete this book?');">Delete</a>
+                                    </div>
                                 <?php endif; ?>
                             </div>
-                            <div class="book-title"><?= htmlspecialchars($book['title']) ?></div>
-                            <div class="book-author">
-                                <?= htmlspecialchars($book['author']) ?><br>
-                                <span class="book-date">
-                                    <?= date('d/m/Y', strtotime($book['created_at'])) ?>
-                                </span>
-                            </div>
-
-                            <?php if ($_SESSION['user']['role'] === 'admin'): ?>
-                                <form method="POST" class="delete-form">
-                                    <input type="hidden" name="book_id" value="<?= $book['id'] ?>">
-                                    <button type="submit" name="delete_book" class="delete-btn">
-                                        <span class="delete-text">Delete</span>
-                                    </button>
-                                </form>
-                            <?php endif; ?>
-                        </div>
+                        </a>
                     <?php endforeach; ?>
                 </div>
             </div>

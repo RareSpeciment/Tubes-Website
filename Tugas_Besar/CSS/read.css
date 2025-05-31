@@ -1,0 +1,61 @@
+.read-content {
+    max-width: 700px;
+    margin: 40px auto 32px auto;
+    padding: 32px;
+    background: #fff;
+    border-radius: 10px;
+    color: #222;
+}
+.read-content pre {
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+.read-content .book-title {
+    margin-top: 0;
+}
+.comment-section {
+    margin-top: 32px;
+}
+.comments-list {
+    margin-top: 16px;
+}
+.comment-item {
+    border-bottom: 1px solid #eee;
+    padding: 8px 0;
+}
+.back-btn {
+    display: inline-block;
+    margin-bottom: 18px;
+    color: #337ab7;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.2s;
+}
+.back-btn:hover {
+    color: #23527c;
+    text-decoration: underline;
+}
+.like-section {
+    font-size: 1.3em;
+    margin-bottom: 12px;
+}
+.like-btn {
+    background: none;
+    border: none;
+    font-size: 1.3em;
+    cursor: pointer;
+    color: #888;
+    transition: color 0.2s;
+    padding: 0 4px;
+}
+.like-btn.liked {
+    color: #e74c3c;
+}
+.like-btn:disabled {
+    cursor: not-allowed;
+    color: #ccc;
+}
+.like-count {
+    font-weight: bold;
+    font-size: 1.1em;
+}

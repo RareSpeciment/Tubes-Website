@@ -51,6 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Login Page</title>
     <link rel="stylesheet" href="..//CSS/register.css">
 </head>
+
 <body>
     <div class="navbar">
         <div class="logo">LOGO</div>
@@ -83,13 +84,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         </div>
     </div>
+
     <footer>
-        <table class="footer-table">
-            <tr>
-                <td class="footer-left">&copy; 2025 Library Website</td>
-                <td class="footer-right">Designed</td>
-            </tr>
-        </table>
+        <?php
+            include 'footer.php';
+        ?>
     </footer>
 </body>
 </html>

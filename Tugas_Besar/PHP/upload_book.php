@@ -13,21 +13,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_book'])) {
     $author = $_POST['author'];
     $description = $_POST['description'];
     $created_at = date('Y-m-d H:i:s');
+    $uploaded_by = $_SESSION['user']['id'];
 
-    if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK) {
+    // Proses file txt
+    $txt_content = null;
+    if (isset($_FILES['txt_file']) && $_FILES['txt_file']['error'] === UPLOAD_ERR_OK) {
+        $txtTmp = $_FILES['txt_file']['tmp_name'];
+        $txt_content = file_get_contents($txtTmp);
+    } else {
+        $message = "File buku (.txt) wajib diupload.";
+    }
+
+    if (isset($_FILES['cover_image']) && $_FILES['cover_image']['error'] === UPLOAD_ERR_OK && $txt_content !== null) {
         $fileTmp = $_FILES['cover_image']['tmp_name'];
         $fileName = uniqid() . '_' . basename($_FILES['cover_image']['name']);
         $targetDir = '../uploads/books/';
         $targetFile = $targetDir . $fileName;
 
         if (move_uploaded_file($fileTmp, $targetFile)) {
-            $stmt = $pdo->prepare("INSERT INTO books (title, author, description, cover_image, created_at) VALUES (?, ?, ?, ?, ?)");
-            $stmt->execute([$title, $author, $description, $fileName, $created_at]);
+            $stmt = $pdo->prepare("INSERT INTO books (title, author, description, cover_image, txtfile, created_at, uploaded_by) VALUES (?, ?, ?, ?, ?, ?, ?)");
+            $stmt->execute([$title, $author, $description, $fileName, $txt_content, $created_at, $uploaded_by]);
             $message = "Buku berhasil diupload!";
         } else {
             $message = "Gagal upload cover buku.";
         }
-    } else {
+    } elseif ($txt_content !== null) {
         $message = "Cover buku wajib diupload.";
     }
 }
@@ -38,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_book'])) {
 <head>
     <meta charset="UTF-8">
     <title>Upload Buku</title>
-    <link rel="stylesheet" href="..//CSS/books.css">
+    <link rel="stylesheet" href="../CSS/books.css">
 </head>
 <body>
     <?php include 'header.php'; ?>
@@ -59,8 +69,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['upload_book'])) {
 
             <label>Cover Buku (jpg/png):</label>
             <input type="file" name="cover_image" accept="image/*" required>
-            <button type="submit" name="upload_book">Upload</button>
 
+            <label>File Buku (.txt):</label>
+            <input type="file" name="txt_file" accept=".txt" required>
+
+            <button type="submit" name="upload_book">Upload</button>
         </form>
         <br>
         <a href="books.php">Kembali ke Daftar Buku</a>

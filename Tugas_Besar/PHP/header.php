@@ -11,7 +11,9 @@
 
 <body>
     <div class="navbar">
-        <div class="logo">LOGO</div>
+        <div class="logo">
+            <img src="../uploads/logo/bookslogo.png" alt="Logo" style="height:40px;">
+        </div>
         <div class="nav-links">
             <a href="index.php" class="nav-link">Home</a>
             <?php
@@ -25,5 +27,4 @@
         </div>
     </div>
 </body>
-
 </html>

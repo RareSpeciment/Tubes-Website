@@ -69,13 +69,6 @@ try {
                     <li class="active">My Account</li>
                 </ul>
             </div>
-            <div class="Web-settings">
-                <h3>WEB SETTINGS</h3>
-                <ul>
-                    <li>Theme</li>
-                    <li>Language</li>
-                </ul>
-            </div>
         </div>
 
         <!-- Main Content -->
